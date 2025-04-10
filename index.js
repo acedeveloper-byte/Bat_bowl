@@ -2,7 +2,6 @@
 const express = require('express');
 const router = require('./router/resultRoutes');
 const app = express();
-const PORT = process.env.PORT || 5000;
 require("./config/dbconnect.js")
 // Middleware
 app.use(express.json()); // for parsing application/json
@@ -18,6 +17,4 @@ app.get('/', (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+module.exports = app
