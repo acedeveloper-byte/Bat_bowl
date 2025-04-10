@@ -1,17 +1,27 @@
 const mongoose = require("mongoose");
 
-const mongoURI = "mongodb+srv://nexsolvesolutions:34598345790237598714327534@cluster0.ecnexqv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+let isConnected = false;
 
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const connectToDatabase = async () => {
+  if (isConnected) {
+    console.log("✅ Reusing existing database connection");
+    return;
+  }
 
-const db = mongoose.connection;
+  try {
+    const mongoURI = "mongodb+srv://nexsolvesolutions:34598345790237598714327534@cluster0.ecnexqv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
-db.once("open", () => {
-  console.log("Connected to MongoDB successfully!");
-});
+    const db = await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-module.exports = db;
+    isConnected = db.connections[0].readyState;
+    console.log("✅ Connected to MongoDB");
+  } catch (error) {
+    console.error("❌ MongoDB connection error:", error);
+    throw error;
+  }
+};
+
+module.exports = connectToDatabase;

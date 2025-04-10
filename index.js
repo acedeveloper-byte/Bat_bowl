@@ -2,7 +2,8 @@
 const express = require('express');
 const router = require('./router/resultRoutes');
 const app = express();
-require("./config/dbconnect.js")
+const connectToDatabase = require('./config/dbconnect');
+connectToDatabase();
 // Middleware
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
